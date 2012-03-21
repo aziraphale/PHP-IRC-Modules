@@ -1,0 +1,80 @@
+Collection of PHP-IRC Modules
+=======================================
+
+This is a collection of modules for the PHP-IRC bot library (http://www.phpbots.org/).
+
+Several of these modules rely on the URL Reveal module's "URL" class, which also (despite its name) provides easy use of mIRC colours. Due to the PHP-IRC library's system of dynamically reloading class definitions, I have included a "load-dynamic-class.php" file with these modules which is used to load url.class.php from within the urlreveal directory, reloading it as required when the class definitions are reloaded.
+
+
+Dice
+===================
+This is a very simple module that simply acts as a dice roller. It accepts channel commands in the format "![x]Dy", where "x" is an optional number of dice to roll (defaulting to 1, with an upper limit of 50) and "y" is the number of sides the dice should have (with a minimum of 2 - a coin - and a maximum of 1,000,000 sides). This can be used for all of your RNG needs (well, some of them) or as a useful part of an IRC-based PnP RPG session.
+
+
+Last.fm
+===================
+This module will, on demand, report the music track that an IRC user is listening to, according to their Last.fm scrobble data. It is activated by the user in question sending a "!np" command to the bot, either by PM (/msg) or /notice. Sending the command via a channel window is supported, but the bot will issue a warning because that would get rather spammy and annoying to other channel occupants.
+
+Since the bot could be in multiple channels at once, the /msg or /notice command should include the name of the channel to send the message to (e.g. "!np #foobar") to send the message to the #foobar channel. If a channel is omitted, the default channel (defined in lastfm.php) will be used instead.
+
+
+Mobile Location
+===================
+This is the counterpart to the "Location for IRC" script (https://github.com/aziraphale/Location-for-IRC) - it monitors for the existence of several filenames containing the location data of an IRC user and then, when one is found, it reports that data into the channel. See the README for that project for more details.
+
+
+MSPs Conversion
+===================
+This is a simple MSP (Microsoft Point) "currency" converter, because all too often I've been asked "How much is 400 MSPs in real money?" and this script has the answer:
+ <Me > !msps 400
+ <Bot> 400 MSPs equates to: £3.40, $5.00 or €4.80
+
+
+Twitter
+===================
+Potentially one of the spammiest modules here, this will connect to Twitter's Streaming API using an account set-up specifically for the bot (you will have to create one of your own) and then report to the channel the details of any tweets posted by a specified list of users:
+ * To the channel: Every non-reply tweet made by a user on the list (private profiles are not supported).
+ * To the channel: Every native retweet made by a user on the list.
+ * Via PM or Notice: Alerts about every @mention or retweet received by that user (again, not including @mentions or RTs made by private accounts - the bot doesn't actually "follow" people, it merely runs a continuous search for public tweets containing the desired names).
+
+
+URL Reveal
+===================
+This is a huge module that analyses every URL that the bot sees and then reports on it under certain conditions:
+ * If the bot's name has been included within any kind of brackets - (), {}, [] or <> - in the same line as the URL, the Web page's title will be displayed.
+ * If the NORMAL_URLS_ENABLED constant in the URL class is TRUE, all URLs will have their page title reported.
+ * If the IMAGES_ENABLED constant in the URL class is TRUE, all images will have their details displayed.
+ * If an image with a filesize larger than 2 MB is linked to, a warning will be omitted (primarily to warn users on mobile devices who may not want to either waste mobile bandwidth downloading large images, or for whom opening physically large images can slow down their device - an issue on a Nokia N900 used by someone in the channel I primarily frequent).
+ * If the URL points to a non-image file that is larger than 512 kB (as this could possibly be a huge HTML file which would cripple mobile browsers).
+ * If the URL points to a "special" file format (again, with the intention of warning mobile users):
+    * PDFs,
+    * MS Word/Excel/PowerPoint/Publisher/Works documents,
+    * PostScript documents,
+    * RTF documents,
+    * Tar/Zip archives,
+    * MPEG/WAV audio files,
+    * BMP/TIFF images,
+    * MPEG/QuickTime/AVI/etc. videos,
+    * Files identified by the Web server as "application/octet-stream"
+ * If a posted URL redirects elsewhere (with a HTTP 3xx redirect, a HTTP header-based redirect or a <META> redirect), the redirect destination will be displayed (in a truncated form, so that the channel isn't flooded, but so that at least the domain and the start of the path are visible). UNLESS, the destination URL matches one of these regular expressions (delimited by #s instead of /s because URLs tend to contain a lot of /s and escaping them all is messy):
+    * #^https?://(www\.)?facebook\.com\b#i
+    * #^https?://(www\.)?google\.(com|co\.\w+)/search\b#i
+    * #(\blogin\b|[a-z]L(?i)ogin)#i
+    * #\bover18\b#i
+    * #\bverify_age\b#i
+ * If a URL pointing to one of these services is posted:
+    * YouTube - Displays the video's title and whether it's 18+ restricted
+    * Twitter - Displays the tweet's poster's name and the body of the tweet
+    * TwitPic - Displays the poster's name and the image's caption
+    * Yfrog - Displays the poster's name and the image's caption
+    * imgur - Displays the image's caption, if one is set
+    * Flickr - Displays the image/set's title
+    * BBC News - Displays the article's headline
+    * BBC Programme - Displays the name, synopsis and air date/time of the programme (works with BBC iPlayer links and several others)
+    * Ebuyer - Displays the name of the product and its price
+    * Android Market (aka Google Play) - Displays the name of the app
+    * Fur Affinity - Displays the image's title, artist's name, the maturity level (general/mature/adult) and a random subset of the image's keywords
+    * InkBunny - Displays the image's title, artist's name, the maturity level (general/mature/adult) and a random subset of the image's keywords
+    * E621 - Displays the image's keywords
+    * SoFurry - Displays the image's title, author and keywords
+    * Wild Critters - Displays the image's keywords
