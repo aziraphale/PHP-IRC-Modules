@@ -40,6 +40,8 @@ Potentially one of the spammiest modules here, this will connect to Twitter's St
 
 URL Reveal
 ===================
+(Originally based on the urlreveal module available at http://www.phpbots.org/modinfo.php?mod=46 but has been so extensively rewritten/updated that very little of the original code remains.)
+
 This is a huge module that analyses every URL that the bot sees and then reports on it under certain conditions:
  * If the bot's name has been included within any kind of brackets - (), {}, [] or <> - in the same line as the URL, the Web page's title will be displayed.
  * If the NORMAL_URLS_ENABLED constant in the URL class is TRUE, all URLs will have their page title reported.
